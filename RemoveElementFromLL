@@ -1,0 +1,104 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node
+{
+    int data;
+    struct Node *next;
+};
+
+
+void insertEnd(struct Node **head, int value)
+{
+    struct Node *newNode, *temp;
+
+    newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = NULL;
+
+    if (*head == NULL)
+    {
+        *head = newNode;
+        return;
+    }
+
+    temp = *head;
+
+    while (temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+
+    temp->next = newNode;
+}
+
+
+struct Node* removeElements(struct Node *head, int val)
+{
+    struct Node *temp;
+
+
+    while (head != NULL && head->data == val)
+    {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+
+
+    temp = head;
+
+    while (temp != NULL && temp->next != NULL)
+    {
+        if (temp->next->data == val)
+        {
+            struct Node *del = temp->next;
+            temp->next = del->next;
+            free(del);
+        }
+        else
+        {
+            temp = temp->next;
+        }
+    }
+
+    return head;
+}
+
+
+void display(struct Node *head)
+{
+    while (head != NULL)
+    {
+        printf("%d -> ", head->data);
+        head = head->next;
+    }
+
+    printf("NULL\n");
+}
+
+int main()
+{
+    struct Node *head = NULL;
+    int val;
+
+    insertEnd(&head, 1);
+    insertEnd(&head, 2);
+    insertEnd(&head, 6);
+    insertEnd(&head, 3);
+    insertEnd(&head, 4);
+    insertEnd(&head, 5);
+    insertEnd(&head, 6);
+
+    printf("Original Linked List:\n");
+    display(head);
+
+    val = 6;
+
+    head = removeElements(head, val);
+
+    printf("Linked List after removing %d:\n", val);
+    display(head);
+
+    return 0;
+}
