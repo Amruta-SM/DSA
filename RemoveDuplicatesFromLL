@@ -1,0 +1,98 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node
+{
+    int data;
+    struct Node *next;
+};
+
+
+void insertEnd(struct Node **head, int value)
+{
+    struct Node *newNode, *temp;
+
+    newNode = (struct Node *)malloc(sizeof(struct Node));
+
+    if (newNode == NULL)
+    {
+        printf("Memory allocation failed!\n");
+        return;
+    }
+
+    newNode->data = value;
+    newNode->next = NULL;
+
+    if (*head == NULL)
+    {
+        *head = newNode;
+        return;
+    }
+
+    temp = *head;
+
+    while (temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+
+    temp->next = newNode;
+}
+
+
+void removeDuplicates(struct Node *head)
+{
+    struct Node *temp, *del;
+
+    temp = head;
+
+    while (temp != NULL && temp->next != NULL)
+    {
+        if (temp->data == temp->next->data)
+        {
+            del = temp->next;
+            temp->next = del->next;
+            free(del);
+        }
+        else
+        {
+            temp = temp->next;
+        }
+    }
+}
+
+
+void display(struct Node *head)
+{
+    struct Node *temp = head;
+
+    while (temp != NULL)
+    {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+
+    printf("NULL\n");
+}
+
+
+int main()
+{
+    struct Node *head = NULL;
+
+    insertEnd(&head, 1);
+    insertEnd(&head, 2);
+    insertEnd(&head, 2);
+    insertEnd(&head, 3);
+
+
+    printf("Original Linked List:\n");
+    display(head);
+
+    removeDuplicates(head);
+
+    printf("\nAfter Removing Duplicates:\n");
+    display(head);
+
+    return 0;
+}
